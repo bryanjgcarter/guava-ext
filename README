@@ -1,0 +1,4 @@
+This is a highly-modified for of the RabbIT proxy from 
+http://www.khelekore.org/rabbit.  It has been modified to be more easily
+callable and used as a library, as well as removing a lot of unused
+(by me, anyway) stuff.
