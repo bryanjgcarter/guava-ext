@@ -48,6 +48,7 @@ public enum Language implements EnumLookup.Keyed<Locale> {
     PORTUGUESE       (Locale.forLanguageTag("pt")),
     ROMANIAN         (Locale.forLanguageTag("ro")),
     RUSSIAN          (Locale.forLanguageTag("ru")),
+    SERBIAN          (Locale.forLanguageTag("sr")),
     SLOVAK           (Locale.forLanguageTag("sk")),
     SLOVENIAN        (Locale.forLanguageTag("sl")),
     SPANISH          (Locale.forLanguageTag("es")),
@@ -62,8 +63,29 @@ public enum Language implements EnumLookup.Keyed<Locale> {
     private final Locale value;
 
     /* Mapping of countries to scripts for when they are missing */
-    private static final ImmutableMap<String, String> scripts = ImmutableMap.of("TW", "Hant",
-                                                                                "CN", "Hans");
+    private static final ImmutableMap<String, String> COUNTRY_SCRIPTS = ImmutableMap.of(
+            "CN", "Hans",
+            "TW", "Hant"
+    );
+    /** Returns the tag mapping to zh-CN and zh-TW if chinaCountry is true */
+    private static final ImmutableMap<Language, String> COUNTRY_MAP = ImmutableMap.of(
+            CHINESE_SIMP, "zh-CN",
+            CHINESE_TRAD, "zh-TW"
+    );
+
+    /**
+     * Returns the language tag (with an optional map of languages).  UNKNOWN returns an empty string
+     */
+    public String getLanguageTag(final ImmutableMap<Language, String> tagMap) {
+        if (this == UNKNOWN) { return ""; }
+        if (tagMap != null && tagMap.containsKey(this)) { return tagMap.get(this); }
+        return getValue().toLanguageTag();
+    }
+    public String getLanguageTag(final boolean chinaCountry) {
+        return getLanguageTag(chinaCountry ? COUNTRY_MAP : null);
+    }
+    public String getLanguageTag() { return getLanguageTag(false); }
+
 
     /* All our values */
     private static final EnumLookup<Language, Locale> $ALL = EnumLookup.of(Language.class);
@@ -71,7 +93,7 @@ public enum Language implements EnumLookup.Keyed<Locale> {
     private static Language tryFind(final Locale l) throws NotFoundException {
         final Locale.Builder b = new Locale.Builder().setLanguage(l.getLanguage()).setScript(l.getScript());
         if (Strings.isNullOrEmpty(l.getScript())) {
-            b.setScript(scripts.get(l.getCountry().toUpperCase()));
+            b.setScript(COUNTRY_SCRIPTS.get(l.getCountry().toUpperCase()));
         }
         final Language f = $ALL.find(b.build());
         if (f == UNKNOWN) {
