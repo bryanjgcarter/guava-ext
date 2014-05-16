@@ -28,7 +28,7 @@
 
         <!-- Versions of jars and plugins -->
         <version.lombok>1.12.6</version.lombok>
-        <version.slf4j>1.7.6</version.slf4j>
+        <version.slf4j>1.7.7</version.slf4j>
         <version.guava>17.0</version.guava>
         <version.jsr305>2.0.3</version.jsr305>
         <version.jackson2>2.3.3</version.jackson2>
